@@ -3,7 +3,7 @@
   geq2imp
   <br>
 </h1>
-<h4 align="center">Convert GraphicEQ *.csv to impulse response</h4>
+<h4 align="center">Convert GraphicEQ *.csv to impulse responses</h4>
 <p align="center">
   <a href="https://github.com/thepbone/geq2imp/releases">
   	<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/thepbone/geq2imp">

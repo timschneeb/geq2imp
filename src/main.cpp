@@ -184,13 +184,13 @@ int main(int argc, char *argv[])
         std::vector<float> right;
         bool leftValid = read_csv(left, parser.value(opt_in_left), jdsp);
         if(!leftValid) {
-            err << "error: failed to process csv for left channel";
+            err << "error: failed to process csv for left channel" << Qt::endl;
             return 2;
         }
 
         bool rightValid = read_csv(right, parser.value(opt_in_right), jdsp);
         if(!rightValid) {
-            err << "error: failed to process csv for right channel";
+            err << "error: failed to process csv for right channel" << Qt::endl;
             return 2;
         }
 
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
     else if(!parser.isSet(opt_in_left) && !parser.isSet(opt_in_right) && parser.isSet(opt_in_mono)) {
         bool valid = read_csv(final, parser.value(opt_in_mono), jdsp);
         if(!valid) {
-            err << "error: failed to process csv";
+            err << "error: failed to process csv" << Qt::endl;
             return 2;
         }
     }

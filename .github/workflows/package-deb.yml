@@ -1,0 +1,92 @@
+name: Debian packages
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+  release:
+    types: 
+     - published
+     - prereleased
+
+jobs:
+  build-amd64:
+    runs-on: ubuntu-20.04
+    container: ubuntu:22.04
+
+    steps:
+    - name: Setup APT
+      run:  echo 'APT::Acquire::Retries "4";' > /etc/apt/apt.conf.d/80-retries
+    
+    - name: Run APT updates
+      run: |
+        apt update
+        apt upgrade -y git
+
+    - uses: actions/checkout@v2
+      with:
+        ref: 'master'
+        submodules: 'recursive'
+
+    - name: Install dependencies
+      run: |
+        export PKG_CONFIG_PATH="/usr/lib/pkgconfig:$PATH"
+        echo 'tzdata tzdata/Areas select Europe' | debconf-set-selections
+        echo 'tzdata tzdata/Zones/Europe select Paris' | debconf-set-selections
+        DEBIAN_FRONTEND="noninteractive" apt install -y libarchive-dev tree make gcc g++ lftp pkg-config qtbase5-private-dev qtbase5-dev libqt5svg5-dev libglibmm-2.4-dev libglib2.0-dev
+      
+    - name: Initialize project
+      run: qmake geq2imp.pro "CONFIG += CI"
+      
+    - name: Build
+      run: |
+        make
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: geq2imp_portable_linux64
+        path: src/geq2imp
+    
+  build-deb-amd64:
+    runs-on: ubuntu-20.04
+    needs: [build-amd64]
+    
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+        ref: 'master'
+        
+    - name: Prepare version information (1/3)
+      uses: oprypin/find-latest-tag@v1
+      with:
+        repository: ThePBone/geq2imp
+        releases-only: false
+      id: last_release  
+    - name: Prepare version information (2/3)
+      uses: benjlevesque/short-sha@v1.2
+      id: short-sha
+      with:
+        length: 6
+    - name: Prepare version information (3/3)
+      run: echo '::set-output name=version::${{steps.last_release.outputs.tag}}-${{steps.short-sha.outputs.sha}}'
+      id: version
+      
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: geq2imp_portable_linux64
+      
+    - name: Build DEB package
+      run: |
+        chmod +x ./meta/build_deb_package.sh
+        ./meta/build_deb_package.sh ${{steps.version.outputs.version}}
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ubuntu22.04_geq2imp_${{steps.version.outputs.version}}_linux64.deb
+        path: geq2imp_${{steps.version.outputs.version}}_linux64.deb

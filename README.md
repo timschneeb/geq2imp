@@ -50,7 +50,7 @@ Options:
 
 ```
 > geq2imp --left testL.csv --right testR.csv --output response.wav --srate 48000
-16384 samples written to 'lr.wav'
+16384 samples written to 'response.wav'
 ```
 
 

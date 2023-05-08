@@ -137,7 +137,7 @@ bool read_csv(std::vector<float>& frames, const QString& path, JamesDSPLib* jdsp
 int main(int argc, char *argv[])
 {
     QCoreApplication app( argc, argv );
-    app.setApplicationName("gep2imp");
+    app.setApplicationName("geq2imp");
     app.setApplicationVersion(APP_VERSION_FULL);
 
 	QCommandLineParser parser;

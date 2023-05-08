@@ -83,7 +83,7 @@ void TwoStageFFTConvolver1x2Init(TwoStageFFTConvolver1x2 *conv)
 }
 
 #ifdef THREAD
-inline void task_wait1x1(TwoStageFFTConvolver1x1 *conv)
+static inline void task_wait1x1(TwoStageFFTConvolver1x1 *conv)
 {
 	pt_info *info = &conv->shared_info;
 	while (1)
@@ -93,7 +93,7 @@ inline void task_wait1x1(TwoStageFFTConvolver1x1 *conv)
 			break;
 	}
 }
-inline void task_wait2x4x2(TwoStageFFTConvolver2x4x2 *conv)
+static inline void task_wait2x4x2(TwoStageFFTConvolver2x4x2 *conv)
 {
 	pt_info2x4x2 *info = &conv->shared_info;
 	while (1)
@@ -103,7 +103,7 @@ inline void task_wait2x4x2(TwoStageFFTConvolver2x4x2 *conv)
 			break;
 	}
 }
-inline void task_wait2x2(TwoStageFFTConvolver2x2 *conv)
+static inline void task_wait2x2(TwoStageFFTConvolver2x2 *conv)
 {
 	pt_info2x2 *info = &conv->shared_info;
 	while (1)
@@ -113,7 +113,7 @@ inline void task_wait2x2(TwoStageFFTConvolver2x2 *conv)
 			break;
 	}
 }
-inline void task_wait1x2(TwoStageFFTConvolver1x2 *conv)
+static inline void task_wait1x2(TwoStageFFTConvolver1x2 *conv)
 {
 	pt_info1x2 *info = &conv->shared_info;
 	while (1)
@@ -416,7 +416,7 @@ void thread_init1x2(TwoStageFFTConvolver1x2 *conv)
 	pthread_create(&conv->threads, NULL, task_type21x2, (void *)info);
 	task_wait1x2(conv);
 }
-inline void task_start1x1(TwoStageFFTConvolver1x1 *conv)
+static inline void task_start1x1(TwoStageFFTConvolver1x1 *conv)
 {
 	pt_info *info = &(conv->shared_info);
 	// ensure worker is waiting
@@ -427,7 +427,7 @@ inline void task_start1x1(TwoStageFFTConvolver1x1 *conv)
 	pthread_cond_signal(&(info->work_cond));
 	pthread_mutex_unlock(&(info->work_mtx));
 }
-inline void task_start2x4x2(TwoStageFFTConvolver2x4x2 *conv)
+static inline void task_start2x4x2(TwoStageFFTConvolver2x4x2 *conv)
 {
 	pt_info2x4x2 *info = &(conv->shared_info);
 	// ensure worker is waiting
@@ -438,7 +438,7 @@ inline void task_start2x4x2(TwoStageFFTConvolver2x4x2 *conv)
 	pthread_cond_signal(&(info->work_cond));
 	pthread_mutex_unlock(&(info->work_mtx));
 }
-inline void task_start2x2(TwoStageFFTConvolver2x2 *conv)
+static inline void task_start2x2(TwoStageFFTConvolver2x2 *conv)
 {
 	pt_info2x2 *info = &(conv->shared_info);
 	// ensure worker is waiting
@@ -449,7 +449,7 @@ inline void task_start2x2(TwoStageFFTConvolver2x2 *conv)
 	pthread_cond_signal(&(info->work_cond));
 	pthread_mutex_unlock(&(info->work_mtx));
 }
-inline void task_start1x2(TwoStageFFTConvolver1x2 *conv)
+static inline void task_start1x2(TwoStageFFTConvolver1x2 *conv)
 {
 	pt_info1x2 *info = &(conv->shared_info);
 	// ensure worker is waiting

@@ -10,12 +10,9 @@
 
 extern "C" {
     #include <jdsp_header.h>
-    #include "Effects/eel2/numericSys/libsamplerate/samplerate.h"
-    #include "Effects/eel2/dr_mp3.h"
-    #include "Effects/eel2/dr_flac.h"
     #include "Effects/eel2/dr_wav.h"
 
-    void NodesSorter(ArbitraryEq *arbEq);
+    extern void NodesSorter(ArbitraryEq *arbEq);
 }
 
 #define STR_(x) #x
